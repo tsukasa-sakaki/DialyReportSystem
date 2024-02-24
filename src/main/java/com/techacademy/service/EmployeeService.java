@@ -73,9 +73,9 @@ public class EmployeeService {
     public ErrorKinds edit(Employee employee) {
 
         //パスワードが空欄だった場合　今のパスワードを使用
-        Employee nowEmployee = findByCode(employee.getCode());
+        Employee oldEmployee = findByCode(employee.getCode());
         if ("".equals(employee.getPassword())) {
-            employee.setPassword(nowEmployee.getPassword());
+            employee.setPassword(oldEmployee.getPassword());
         }
         else {
         // パスワードチェック
@@ -88,7 +88,7 @@ public class EmployeeService {
         employee.setDeleteFlg(false);
 
         LocalDateTime now = LocalDateTime.now();
-        employee.setCreatedAt(now);
+        employee.setCreatedAt(oldEmployee.getCreatedAt());
         employee.setUpdatedAt(now);
 
         employeeRepository.save(employee);
