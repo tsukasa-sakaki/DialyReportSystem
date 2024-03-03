@@ -47,6 +47,7 @@ public class Report {
     // 内容
     @Column(columnDefinition="LONGTEXT")
     @NotEmpty
+    @Length(max = 600)
     private String content;
 
     //社員番号
