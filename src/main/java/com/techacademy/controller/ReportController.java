@@ -98,7 +98,7 @@ public class ReportController {
     }
 
     // 日報更新画面
-    @GetMapping(value = "/rupdate/{id}/")
+    @GetMapping(value = "/rupdate/{id}")
     public String edit(@PathVariable Integer id, Model model) {
 
         model.addAttribute("report", reportService.findById(id));
