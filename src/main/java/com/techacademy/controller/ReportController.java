@@ -99,13 +99,12 @@ public class ReportController {
 
     // 日報更新画面
     @GetMapping(value = "/rupdate/{id}")
-    public String edit(@PathVariable Integer id, Model model) {
+    public String getUser(@PathVariable Integer id, Model model) {
 
         model.addAttribute("report", reportService.findById(id));
 
         return "reports/rupdate";
     }
-
 
     // 日報更新登録処理
     @PostMapping(value = "/rupdate/{id}")
@@ -120,7 +119,7 @@ public class ReportController {
 
         if (ErrorMessage.contains(result)) {
             model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-            return edit(null, model);
+            return getUser(null, model);
         }
         return "redirect:/reports";
     }
