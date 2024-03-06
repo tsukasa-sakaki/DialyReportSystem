@@ -53,20 +53,18 @@ public class ReportController {
 
     // 日報新規登録処理
     @PostMapping(value = "/radd")
-    public String radd(@Validated Report report, @AuthenticationPrincipal UserDetail userDetail, BindingResult res, Model model) {
+    public String radd(@Validated Report report, BindingResult res, @AuthenticationPrincipal UserDetail userDetail, Model model) {
 
         // 入力チェック
         if (res.hasErrors()) {
             return reportcreate(report, userDetail, model);
         }
 
-
-
             ErrorKinds result = reportService.save(report, userDetail);
 
             if (ErrorMessage.contains(result)) {
                 model.addAttribute(ErrorMessage.getErrorName(result),
-                        ErrorMessage.getErrorValue(result));
+                                   ErrorMessage.getErrorValue(result));
 
             return reportcreate(report, userDetail, model);
         }
@@ -100,9 +98,10 @@ public class ReportController {
     // 日報更新画面
     @GetMapping(value = "/rupdate/{id}")
     public String getUser(@PathVariable Integer id, Model model) {
-
+        // Modelにサービスから取得したuserを登録
+        if(id != null) {
         model.addAttribute("report", reportService.findById(id));
-
+        }
         return "reports/rupdate";
     }
 
@@ -118,7 +117,8 @@ public class ReportController {
         ErrorKinds result = reportService.edit(report);
 
         if (ErrorMessage.contains(result)) {
-            model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+            model.addAttribute(ErrorMessage.getErrorName(result),
+                               ErrorMessage.getErrorValue(result));
             return getUser(null, model);
         }
         return "redirect:/reports";

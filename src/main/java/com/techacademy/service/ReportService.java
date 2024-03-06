@@ -76,23 +76,6 @@ public class ReportService {
         return ErrorKinds.SUCCESS;
     }
 
-    //日付重複チェックの処理
-    private ErrorKinds reportDateCheck(Report report, Employee employee) {
-        //ログインユーザーの日報を検索
-        List<Report> employeereport = reportRepository.findByEmployee(employee);
-
-        //日付が同じものがあるか探す
-        for(Report r : employeereport) {
-            if(r.getReportDate().isEqual(report.getReportDate())) {
-
-                return ErrorKinds.DATECHECK_ERROR;
-            }
-        }
-
-        return ErrorKinds.CHECK_OK;
-    }
-
-
     // 日報 削除
     @Transactional
     public ErrorKinds delete(Integer id) {
@@ -128,6 +111,28 @@ public class ReportService {
 
         reportRepository.save(report);
         return ErrorKinds.SUCCESS;
+    }
+
+    //日付重複チェックの処理
+    private ErrorKinds reportDateCheck(Report report, Employee employee) {
+        //ログインユーザーの日報を検索
+        List<Report> employeereport = reportRepository.findByEmployee(employee);
+
+        //日付が同じものがあるか探す
+        for(Report r : employeereport) {
+            if(r.getReportDate().isEqual(report.getReportDate())) {
+                // 更新時、画面で表示中の日報データを除く
+                if(report.getId() != null) {
+                if(report.getId().equals(r.getId())) {
+                    continue;
+                    }
+                }
+
+                return ErrorKinds.DATECHECK_ERROR;
+            }
+        }
+
+        return ErrorKinds.CHECK_OK;
     }
 
 }

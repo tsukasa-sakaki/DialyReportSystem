@@ -14,6 +14,7 @@ public class ErrorMessage {
         private static final long serialVersionUID = 1L;
 
         {
+            // 従業員チェック用エラーメッセージ
             // パスワード空白チェック用エラーメッセージ
             put(ErrorKinds.BLANK_ERROR, new ArrayList<String>(Arrays.asList("passwordError", "値を入力してください")));
             // パスワードの半角英数字チェック用エラーメッセージ
@@ -32,6 +33,25 @@ public class ErrorMessage {
                     new ArrayList<String>(Arrays.asList("deleteError", "ログイン中の従業員を削除することは出来ません")));
             // 同一日付チェック用エラーメッセージ
             put(ErrorKinds.DATECHECK_ERROR, new ArrayList<String>(Arrays.asList("reportDateError", "既に登録されている日付です")));
+
+            /*
+            // 日報チェック用エラーメッセージ 追加
+            // 指名空白チェック用エラーメッセージ
+            put(ErrorKinds.NAME_BLANK_ERROR, new ArrayList<String>(Arrays.asList("nameError", "値を入力してください")));
+            // 指名文字数チェック用エラーメッセージ
+            put(ErrorKinds.NAME_RANGECHECK_ERROR, new ArrayList<String>(Arrays.asList("nameError", "20文字以下で入力してください")));
+            // タイトル空白チェック用エラーメッセージ
+            put(ErrorKinds.TITLE_BLANK_ERROR, new ArrayList<String>(Arrays.asList("titleError", "値を入力してください")));
+            // タイトル文字数チェック用エラーメッセージ
+            put(ErrorKinds.TITLE_RANGECHECK_ERROR, new ArrayList<String>(Arrays.asList("titleError", "100文字以下で入力してください")));
+            // 内容空白チェック用エラーメッセージ
+            put(ErrorKinds.CONTENT_BLANK_ERROR, new ArrayList<String>(Arrays.asList("contentError", "値を入力してください")));
+            // 内容文字数チェック用エラーメッセージ
+            put(ErrorKinds.CONTENT_RANGECHECK_ERROR, new ArrayList<String>(Arrays.asList("contentError", "600文字以下で入力してください")));
+            // 日付空白チェック用エラーメッセージ
+            put(ErrorKinds.DATECHECK_BLANK_ERROR, new ArrayList<String>(Arrays.asList("reportDateError", "値を入力してください")));
+            */
+
         }
     };
 
