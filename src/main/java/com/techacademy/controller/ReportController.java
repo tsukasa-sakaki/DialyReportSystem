@@ -36,8 +36,8 @@ public class ReportController {
     @GetMapping
     public String list(@AuthenticationPrincipal UserDetail userDetail,Model model) {
 
-            model.addAttribute("listSize", reportService.findAll().size());
-            model.addAttribute("reportList", reportService.findAll());
+            model.addAttribute("listSize", reportService.find(userDetail).size());
+            model.addAttribute("reportList", reportService.find(userDetail));
 
         return "reports/rlist";
     }
@@ -97,29 +97,32 @@ public class ReportController {
 
     // 日報更新画面
     @GetMapping(value = "/rupdate/{id}")
-    public String getUser(@PathVariable Integer id, Model model) {
+    public String getUser(@PathVariable Integer id,@AuthenticationPrincipal UserDetail userDetail, Model model) {
         // Modelにサービスから取得したuserを登録
-        if(id != null) {
-        model.addAttribute("report", reportService.findById(id));
+        model.addAttribute("name", userDetail.getEmployee().getName());
+
+        if (id != null) {
+            model.addAttribute("report", reportService.findById(id));
         }
+
         return "reports/rupdate";
     }
 
     // 日報更新登録処理
     @PostMapping(value = "/rupdate/{id}")
-    public String rupdate(@Validated Report report, BindingResult res, Model model) {
+    public String rupdate(@Validated Report report, BindingResult res, @AuthenticationPrincipal UserDetail userDetail, Model model) {
 
         // 入力チェック
         if (res.hasErrors()) {
-            return "reports/rupdate";
+            return getUser(null, userDetail, model);
         }
 
-        ErrorKinds result = reportService.edit(report);
+        ErrorKinds result = reportService.edit(report, userDetail);
 
         if (ErrorMessage.contains(result)) {
             model.addAttribute(ErrorMessage.getErrorName(result),
                                ErrorMessage.getErrorValue(result));
-            return getUser(null, model);
+            return getUser(null, userDetail, model);
         }
         return "redirect:/reports";
     }

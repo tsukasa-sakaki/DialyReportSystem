@@ -35,10 +35,10 @@ public class ReportService {
         Employee employee = userDetail.getEmployee();
         //管理者権限のユーザーの場合、他従業員が登録したものを含めた全日報情報を一覧表示。
         if(employee.getRole().equals(Role.ADMIN)) {
-           return reportRepository.findAll();
+           return findAll();
         //一般権限のユーザーの場合、自分が登録した日報情報のみ一覧表示。
         }else {
-            return reportRepository.findByEmployee(employee);
+            return findByEmployee(employee);
         }
 
     }
@@ -50,6 +50,12 @@ public class ReportService {
         // 取得できなかった場合はnullを返す
         Report report = option.orElse(null);
         return report;
+    }
+
+    //従業員（employee）に紐づいている、日報のリスト（reportList）
+    public List<Report> findByEmployee(Employee employee) {
+        List<Report> reports = reportRepository.findByEmployee(employee);
+        return reports;
     }
 
     // 日報保存
@@ -90,10 +96,10 @@ public class ReportService {
 
     // 日報更新
     @Transactional
-    public ErrorKinds edit(Report report) {
+    public ErrorKinds edit(Report report, UserDetail userDetail) {
 
-        //reportのユーザー情報を取得
-        Employee employee = report.getEmployee();
+        //ログインユーザーの情報を取得
+        Employee employee = userDetail.getEmployee();
         //今のレポートを取得
         Report oldReport = findById(report.getId());
 
@@ -108,6 +114,7 @@ public class ReportService {
         LocalDateTime now = LocalDateTime.now();
         report.setCreatedAt(oldReport.getCreatedAt());
         report.setUpdatedAt(now);
+        report.setEmployee(oldReport.getEmployee());
 
         reportRepository.save(report);
         return ErrorKinds.SUCCESS;
@@ -123,7 +130,7 @@ public class ReportService {
             if(r.getReportDate().isEqual(report.getReportDate())) {
                 // 更新時、画面で表示中の日報データを除く
                 if(report.getId() != null) {
-                if(report.getId().equals(r.getId())) {
+                if(r.getId().equals(report.getId())) {
                     continue;
                     }
                 }
